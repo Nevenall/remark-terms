@@ -1,0 +1,33 @@
+{
+  "name": "remark-terms",
+  "version": "1.0.0",
+  "description": "Add parsing of forward slashes and curly braces to mark special terms.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nevenall/remark-terms.git"
+  },
+  "keywords": [
+    "unified",
+    "remark",
+    "markdown"
+  ],
+  "author": "Dan 'Nevenall' Behlings",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Nevenall/remark-terms/issues"
+  },
+  "homepage": "https://github.com/Nevenall/remark-terms#readme",
+
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "rehype-stringify": "^5.0.0",
+    "remark-parse": "^6.0.3",
+    "remark-rehype": "^4.0.0",
+    "unified": "^7.1.0",
+    "vfile-reporter": "^5.1.1"
+  }
+}
