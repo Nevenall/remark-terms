@@ -44,7 +44,6 @@ const remarkParse = require('remark-parse')
 const remarkTerms = require('remark-terms')
 const stringify = require('rehype-stringify')
 const remark2rehype = require('remark-rehype')
-
 ```
 
 Usage:

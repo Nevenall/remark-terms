@@ -2,7 +2,7 @@
   "name": "remark-terms",
   "version": "1.0.0",
   "description": "Add parsing of forward slashes and curly braces to mark special terms.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "mocha"
   },
