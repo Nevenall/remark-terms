@@ -1,11 +1,14 @@
 {
   "name": "remark-terms",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Add parsing of forward slashes and curly braces to mark special terms.",
   "main": "src/index.js",
   "scripts": {
     "test": "mocha"
   },
+  "files": [
+    "src/**"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Nevenall/remark-terms.git"
