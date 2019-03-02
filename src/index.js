@@ -14,10 +14,9 @@ function plugin(options) {
       }
    }
 
-   // console.log("", options)
+   // todo - make start and end of terms configurable like containers
 
-   // restructure as braces and slashes then we can fiddle with the
-   // the correct 
+
    function singleBrace(eat, value, silent) {
       var m = singleBraceRegex.exec(value)
       if (m) {
