@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/Nevenall/remark-terms#readme",
   "devDependencies": {
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.2",
     "rehype-stringify": "^5.0.0",
     "remark-parse": "^6.0.3",
     "remark-rehype": "^4.0.0",
