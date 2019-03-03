@@ -8,33 +8,51 @@ var terms = require('../src/index')
 
 var processor = unified()
    .use(markdown)
-   .use(terms)
+   .use(terms, [{
+         open: '{',
+         close: '}',
+         element: 'span',
+         class: 'term-1'
+      },
+      {
+         open: '{{',
+         close: '}}',
+         element: 'span',
+         class: 'term-2'
+      },
+      {
+         open: '/',
+         close: '/',
+         element: 'span',
+         class: 'term-3'
+      }
+   ])
    .use(remark2rehype)
    .use(html)
 
-
-
 describe('special terms parsing', function() {
 
-
-   // unifiedjs will render html classes in ""
    var tests = [{
-         md: "# Title with //term// with some //text// after.",
+         md: "# Title with {{term}} with some {{text}} after.",
          expected: '<h1>Title with <span class="term-2">term</span> with some <span class="term-2">text</span> after.</h1>'
       },
       {
-         md: "////",
-         expected: "<p>////</p>"
+         md: "{{}}",
+         expected: `<p><span class="term-2"></span></p>`
       },
       {
-         md: "// term with a space//",
+         md: "{{ term with a space}}",
          expected: '<p><span class="term-2"> term with a space</span></p>'
       },
       {
-         md: `//term phrase with 
-         a new line//`,
+         md: `{{term phrase with 
+         a new line}}`,
          expected: '<p><span class="term-2">term phrase with\na new line</span></p>'
-      }
+      },
+      {
+         md: `{{term phrase with a /nested term/}}`,
+         expected: '<p><span class="term-2">term phrase with a <span class="term-3">nested term</span></span></p>'
+      },
    ]
 
    tests.forEach(function(test) {
@@ -42,7 +60,7 @@ describe('special terms parsing', function() {
       it(test.md, function() {
          processor.process(test.md, function(err, file) {
             if (err) assert.fail(err)
-            assert.equal(file, test.expected)
+            assert.equal(file.toString(), test.expected)
          })
       })
 

@@ -25,7 +25,7 @@ function plugin(options) {
 
          tokenizers[name] = function(eat, value, silent) {
             if (value.startsWith(config.open)) {
-               let closeIndex = value.lastIndexOf(config.close)
+               let closeIndex = value.indexOf(config.close, config.open.length)
                if (closeIndex !== -1) {
                   if (silent) return true
 
