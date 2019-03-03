@@ -10,17 +10,39 @@ var terms = require('./src/index')
 
 var processor = unified()
    .use(markdown)
-   .use(terms, {
-      classes: {
-         doubleSlash: "game-term"
-      }
-   })
+   .use(terms, [{
+      open: '{',
+      close: '}',
+      element: 'span',
+      class: 'term-1'
+   }, {
+      open: '{{',
+      close: '}}',
+      element: 'span',
+      class: 'term-2'
+   }])
    .use(remark2rehype)
    .use(html)
 
 
 
-processor.process("# totally a header with //doubleslash// and /singleslash/", function(err, file) {
+
+let text = `
+# header with special {term} inside
+
+also we want to:
+
+- {{term2}} should be term2
+- {{term2 also}} more stuff!
+- {I am a {{nested}} term to see what happens}
+
+But also {we want to see if we can do a phrase that transends a 
+new line?}
+
+`
+
+
+processor.process(`{{I am a special phrase with a {nested} term.}}`, function(err, file) {
    console.error(report(err || file))
    console.log(String(file))
 })

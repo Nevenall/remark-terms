@@ -1,34 +1,28 @@
 # remark-terms
 
-This [remark][remark] plugin parses custom Markdown syntax to render words or phrases surrounded by span elements with custom classes.
+This [remark] plugin parses customizable markdown for indicating special terms and phrases. 
 
-## Syntax
+## Default Syntax
 
-Terms can be marked with forward slashes or curly braces. 
+Special terms are marked with 1 or 2 curly braces `{}`. 
 
 ```markdown
-/term type 1/
-//term type 2//
-{term type 3}
-{{term type 4}}
+{term one}
+{{term two}}
 ```
 
-This would compile to the following HTML:
+results in:
 
 ```html
-<span class="term-1">term type 1</span>
-<span class="term-2">term type 2</span>
-<span class="term-3">term type 3</span>
-<span class="term-4">term type 4</span>
+<span class="term-1">term one</span>
+<span class="term-2">term two</span>
 ```
 
-Terms can be places in most text including headers:
+Terms will be parsed in most places, including headers: `# Header with a {term}` renders as `<h1>Header with a <span class="term-1">term</span></h1>`
 
-> `# Header with a /term/` renders as `<h1>Header with a <span class="term-1">term</span></h1>`
+Nested terms will also be parsed: `{I am a special phrase with a {{nested}} term.}` renders as `<p><span class="term-1">I am a special phrase with a <span class="term-2">nested</span> term.</span></p>`
 
 ## Installation
-
-[npm][npm]:
 
 ```bash
 npm install remark-terms
@@ -58,20 +52,53 @@ unified()
 
 ## Options
 
-### options.classes
-
-Specify custom classes for terms.
-
-**example**
+Options can be supplied to `remark-terms` as an `[]` of `Configurations`:
 
 ```javascript
-.use(remarkTerms, { classes: {
-  singleSlash: "custom-term",
-  doubleSlash: "otherclass",
-  singleBrace: "game-term",
-  doubleBrace: "special-term"
-} })
+var processor = unified()
+   .use(markdown)
+   .use(terms, [{
+      open: '{',
+      close: '}',
+      element: 'span',
+      class: 'term-1'
+   }, {
+      open: '{{',
+      close: '}}',
+      element: 'span',
+      class: 'term-2'
+   }])
+   .use(remark2rehype)
+   .use(html)
 ```
+
+### `Configurations`
+
+Configures a particular special term. 
+
+#### `open`
+
+*Required*
+
+A string that marks the start of a term. 
+
+#### `close`
+
+*Required*
+
+A string that marks the end of a special term.
+
+#### `element`
+
+*Optional, default is `span`*
+
+The name of an html element as a string. This can be anything, but a [flow content] will probably work the best.
+
+#### `class`
+
+*Optional, default is none*
+
+The optional name of a class to place on the element.
 
 ## License
 
@@ -86,3 +113,5 @@ Specify custom classes for terms.
 [npm]: https://www.npmjs.com/package/remark-terms
 
 [remark]: https://github.com/remarkjs/remark
+
+[flow content]: https://www.w3.org/TR/2011/WD-html5-20110525/content-models.html#flow-content-0
