@@ -30,7 +30,7 @@ var processor = unified()
    .use(remark2rehype)
    .use(html)
 
-describe('special terms parsing', function() {
+describe('remark-terms', function() {
 
    var tests = [{
          md: "# Title with {{term}} with some {{text}} after.",
