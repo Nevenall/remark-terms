@@ -1,5 +1,5 @@
 {
-  "name": "remark-terms",
+  "name": "@nevenall/remark-terms",
   "version": "2.0.0",
   "description": "Add parsing curly braces to mark special terms",
   "main": "src/index.js",
