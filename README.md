@@ -94,6 +94,13 @@ A string that marks the end of a special term.
 
 The name of an html element as a string. This can be anything, but a [flow content] will probably work the best.
 
+#### `name`
+
+*Optional, default is none*
+
+The optional name the element used internally by remark.
+
+
 #### `class`
 
 *Optional, default is none*
