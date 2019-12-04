@@ -25,11 +25,11 @@
   },
   "homepage": "https://github.com/Nevenall/remark-terms#readme",
   "devDependencies": {
-    "mocha": "^6.0.2",
-    "rehype-stringify": "^5.0.0",
-    "remark-parse": "^6.0.3",
-    "remark-rehype": "^4.0.0",
-    "unified": "^7.1.0",
-    "vfile-reporter": "^5.1.1"
+    "mocha": "^6.2.2",
+    "rehype-stringify": "^6.0.1",
+    "remark-parse": "^7.0.2",
+    "remark-rehype": "^5.0.0",
+    "unified": "^8.4.2",
+    "vfile-reporter": "^6.0.0"
   }
 }

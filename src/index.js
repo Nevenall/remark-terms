@@ -1,10 +1,12 @@
 function plugin(options) {
    options = options || [{
+      name: 'special_term_1',
       open: '{',
       close: '}',
       element: 'span',
       class: 'term-1'
    }, {
+      name: 'special_term_2',
       open: '{{',
       close: '}}',
       element: 'span',
@@ -21,7 +23,7 @@ function plugin(options) {
       //require: term.open, term.closed
       if (config.open !== undefined && config.open !== null && config.open !== '' && config.close !== undefined && config.close !== null && config.close !== '') {
          // default element 'span', default class 'term'
-         let name = `term_${idx}`
+         let name = config.name || `term_${idx}`
 
          tokenizers[name] = function(eat, value, silent) {
             if (value.startsWith(config.open)) {
