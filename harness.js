@@ -8,23 +8,24 @@ var report = require('vfile-reporter')
 var terms = require('./src/index')
 
 
+// [{
+//    open: '{',
+//    close: '}',
+//    element: 'span',
+//    class: 'term-1'
+// }, {
+//    open: '{{',
+//    close: '}}',
+//    element: 'span',
+//    class: 'term-2'
+// }]
+
+
 var processor = unified()
    .use(markdown)
-   .use(terms, [{
-      open: '{',
-      close: '}',
-      element: 'span',
-      class: 'term-1'
-   }, {
-      open: '{{',
-      close: '}}',
-      element: 'span',
-      class: 'term-2'
-   }])
+   .use(terms)
    .use(remark2rehype)
    .use(html)
-
-
 
 
 let text = `
@@ -33,8 +34,11 @@ let text = `
 also we want to:
 
 - {{term2}} should be term2
+- {term1}{{followed by term2}}
 - {{term2 also}} more stuff!
 - {I am a {{nested}} term to see what happens}
+- {{I am a differently nested {term}}}
+- {{I am a thirdly {nested} term}}
 
 But also {we want to see if we can do a phrase that transends a 
 new line?}
@@ -42,7 +46,7 @@ new line?}
 `
 
 
-processor.process(`{{I am a special phrase with a {nested} term.}}`, function(err, file) {
+processor.process(text, function(err, file) {
    console.error(report(err || file))
    console.log(String(file))
 })

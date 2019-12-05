@@ -23,11 +23,18 @@ function plugin(options) {
       //require: term.open, term.closed
       if (config.open !== undefined && config.open !== null && config.open !== '' && config.close !== undefined && config.close !== null && config.close !== '') {
          // default element 'span', default class 'term'
+         // name will be the name of the tokenizer
          let name = config.name || `term_${idx}`
 
          tokenizers[name] = function(eat, value, silent) {
             if (value.startsWith(config.open)) {
+
+            // todo - how can we ensure that nested doubles works? 
+            // ensure that the close we picked doesn't match any other close. 
                let closeIndex = value.indexOf(config.close, config.open.length)
+               
+               // alternately we can
+
                if (closeIndex !== -1) {
                   if (silent) return true
 
