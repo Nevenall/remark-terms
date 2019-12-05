@@ -55,8 +55,8 @@ describe('basic useage', () => {
    },
    {
       testing: 'escaped term',
-      md: `\{Escaped term\}`,
-      expected: `<p>Escaped term</p>`
+      md: `\\{Escaped term\\}`,
+      expected: `<p>{Escaped term}</p>`
    }
    ]
 
@@ -67,7 +67,7 @@ describe('basic useage', () => {
 describe('nested terms', () => {
 
    let processor = unified()
-      .use(markdown)
+      .use(markdown, { commonmark: true })
       .use(terms)
       .use(remark2rehype)
       .use(html)
@@ -88,7 +88,7 @@ describe('nested terms', () => {
 describe('customized terms', function () {
 
    let processor = unified()
-      .use(markdown)
+      .use(markdown, { commonmark: true })
       .use(terms, [{
          open: '{',
          close: '}',
