@@ -11,20 +11,19 @@ function runTests(tests, processor) {
    tests.forEach(test => {
       if (test.ignore) return
 
-      it(`(${test.testing}) ${test.md}`, () => {
-         processor.process(test.md, (err, file) => {
+      it(`(${test.testing}) ${test.md}`, function () {
+         processor.process(test.md, function (err, file) {
             if (err) assert.fail(err)
             assert.equal(file.toString(), test.expected)
          })
       })
-
 
    })
 }
 
 
 
-describe('basic useage', () => {
+describe('basic usage', function () {
 
    let processor = unified()
       .use(markdown, { commonmark: true })
@@ -64,7 +63,7 @@ describe('basic useage', () => {
 })
 
 
-describe('nested terms', () => {
+describe('nested terms', function () {
 
    let processor = unified()
       .use(markdown, { commonmark: true })
@@ -75,9 +74,27 @@ describe('nested terms', () => {
 
    let tests = [
       {
-         ignore: true,
-         testing: 'term 1 with nested term 2',
+         ignore: false,
+         testing: 'term 1 with interior nested term 2',
+         md: `{term phrase with a {{nested term}} inside it}`,
+         expected: `<p><span class="term-1">term phrase with a <span class="term-2">nested term</span> inside it</span></p>`
+      },
+      {
+         ignore: false,
+         testing: 'term 2 with interior nested term 1',
+         md: `{{term phrase with a {nested term} inside it}}`,
+         expected: `<p><span class="term-2">term phrase with a <span class="term-1">nested term</span> inside it</span></p>`
+      },
+      {
+         ignore: false,
+         testing: 'term 1 with nested term 2 at end',
          md: `{term phrase with a {{nested term}}}`,
+         expected: `<p><span class="term-1">term phrase with a <span class="term-2">nested term</span></span></p>`
+      },
+      {
+         ignore: false,
+         testing: 'term 2 with nested term 1 at end',
+         md: `{{term phrase with a {nested term}}}`,
          expected: `<p><span class="term-1">term phrase with a <span class="term-2">nested term</span></span></p>`
       },
    ]
@@ -85,7 +102,7 @@ describe('nested terms', () => {
    runTests(tests, processor)
 })
 
-describe('customized terms', function () {
+describe.skip('customized terms', function () {
 
    let processor = unified()
       .use(markdown, { commonmark: true })
@@ -106,7 +123,7 @@ describe('customized terms', function () {
 
    let tests = [
       {
-         ignore: true,
+         ignore: false,
          testing: 'dev',
          md: `{term phrase with a {{nested term}}}`,
          expected: `<p><span class="term-1">term phrase with a <span class="term-2">nested term</span></span></p>`
