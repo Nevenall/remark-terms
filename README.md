@@ -24,7 +24,7 @@ Terms will be parsed in most places, including headers: `# Header with a {term}`
 
 Nested terms will also be parsed: `{I am a special phrase with {several} nested {{terms}}` renders as `<p><span class="term-1">I am a special phrase with <span class="term-1">several</span> nested <span class="term-2">terms</span></span></p>`
 
-Special term syntax can be escaped with double backslashes (`\\`). For example: `{this special term needs to \\{preserve\\} curly braces}`
+Special term syntax can be escaped in markdown with a backslash (`\`). For example: `{this special term needs to \{preserve\} curly braces}` renders as `<p><span class="term-1">this special term needs to {preserve} curly braces</span></p>`
 
 ## Installation
 
