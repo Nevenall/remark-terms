@@ -1,8 +1,6 @@
 # remark-terms
 
-This [remark] plugin adds customizable parsing to wrap arbitrary markdown text with an inline element. 
-
-todo - clarify nesting precedence
+This [remark] plugin adds parsing to wrap markdown text in `<span>` elements with a unique `class`. 
 
 ## Default Syntax
 
