@@ -5,6 +5,8 @@ var html = require('rehype-stringify')
 var report = require('vfile-reporter')
 
 
+var tokenizeWords = require('space-separated-tokens')
+
 var terms = require('./src/index')
 
 
@@ -22,10 +24,13 @@ var terms = require('./src/index')
 
 
 var processor = unified()
-   .use(markdown)
+   .use(markdown, { commonmark: true })
    .use(terms)
    .use(remark2rehype)
    .use(html)
+
+
+
 
 
 let text = `
@@ -35,76 +40,125 @@ also we want to:
 
 - {{term2}} should be term2
 - {term1}{{followed by term2}}
-- {{term2 also}} more stuff!
+- more stuff and {{term2 also}}
 - {I am a {{nested}} term to see what happens}
 - {{I am a differently nested {term}}}
 - {{I am a thirdly {nested} term}}
 
 But also {we want to see if we can do a phrase that transends a 
 new line?}
-
 `
+let text3 = `{term1}{{followed by term2}}`
+
+let str = `{I am a {{differently}} nested {{term}}}`
+
+console.log(str)
 
 
-processor.process(text, function(err, file) {
-   console.error(report(err || file))
-   console.log(String(file))
-})
+// open , i
+// depth 0
+
+// have to do this character by character
+// use str.startsWith and an index 
+// if we find another opener now, depth ++,
+// but we need to track multiple opening and closings
+// except, we always know the closer we are looking for because it will match
+// the opener. 
+// 
+
+
+options = options || [{
+   name: 'special_term_1',
+   open: '{',
+   close: '}',
+   element: 'span',
+   class: 'term-1'
+}, {
+   name: 'special_term_2',
+   open: '{{',
+   close: '}}',
+   element: 'span',
+   class: 'term-2'
+}]
+
+let open = str.indexOf('{')
+let index = open + 1
+let term = []
+let closers = ['}']
+
+do {
+   let newCloser = startsWithOpener(str, index, options)
+   if (newCloser) {
+      closers.unshift(newCloser)
+      index = index + newCloser.length
+   } else {
+
+
+   }
+
+   // if no new opener, check for a closer, 
+
+   term.push()
+}
+while (closers.length > 0 && index <= str.length)
+
+
+function startsWithOpener(str, index, options) {
+   options.forEach(t => {
+      if (str.startsWith(t.open, index)) {
+         return t.close
+      }
+   })
+   return null
+}
+
+
+// let open = str.indexOf('{')
+
+// let close = str.indexOf('}', open)
+
+
+// // if there is another opener
+// let escapedOpen = str.indexOf('{', open) // config.open
+// let nestedOpen = str.indexOf('{{', open) // search once for each other term opener, if any of then are < close, we may have an issue
+
+// if (nestedOpen < close) {
+//    // look for the closer for the nested term
+//    let nestedClose = str.indexOf('}}', nestedOpen)
+
+//    if (nestedClose > -1) {
+//       // find the first closer after the end of the nested term
+//       close = str.indexOf('}', nestedClose + 2)  // closing term.length
+//    }
+
+// } else if (escapedOpen < close) {
+//    let escapedClose = str.indexOf('}', nestedOpen)
+//    if (escapedClose > -1) {
+//       close = str.indexOf('}', escapedClose + 1)// closing term.length
+//    }
+
+// }
+
+// console.log(str.substring(open + 1, close))
+
+// if escaped and nested are not -1 and equal, we got a nested 
+// if just escaped is greater then -1 then it's an escape sequence
+// if nested, look for 
 
 
 
 
-// processor.process("//", function(err, file) {
+
+
+
+
+
+
+
+
+// processor.process(text2, function (err, file) {
 //    console.error(report(err || file))
 //    console.log(String(file))
 // })
 
-// processor.process("////", function(err, file) {
-//    console.error(report(err || file))
-//    console.log(String(file))
-// })
 
-// processor.process("{}", function(err, file) {
-//    console.error(report(err || file))
-//    console.log(String(file))
-// })
-
-// processor.process("{{}}", function(err, file) {
-//    console.error(report(err || file))
-//    console.log(String(file))
-// })
-
-
-// processor.process(`{term phrase with
-//     a new line}`, function(err, file) {
-//    console.error(report(err || file))
-//    console.log(String(file))
-// })
-
-// processor.process(`/term phrase with
-//    a new line/`, function(err, file) {
-//    console.error(report(err || file))
-//    console.log(String(file))
-// })
-
-
-
-// processor.process("//term/", function(err, file) {
-//    console.error(report(err || file))
-//    console.log(String(file))
-// })
-
-// processor.process("/term//", function(err, file) {
-//    console.error(report(err || file))
-//    console.log(String(file))
-// })
-
-processor.process("{/term/}", function(err, file) {
-   console.error(report(err || file))
-   console.log(String(file))
-})
-
-processor.process("/{term}/", function(err, file) {
-   console.error(report(err || file))
-   console.log(String(file))
-})

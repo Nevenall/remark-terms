@@ -92,10 +92,22 @@ describe('nested terms', function () {
          expected: `<p><span class="term-1">term phrase with a <span class="term-2">nested term</span></span></p>`
       },
       {
+         ignore: true,
+         testing: 'term 1 with two nested term 2s',
+         md: `{term 1 with {{TWO}} nested {{term2s}}}`,
+         expected: `<p><span class="term-1">term phrase with a <span class="term-2">nested term</span></span></p>`
+      },
+      {
          ignore: false,
          testing: 'term 2 with nested term 1 at end',
          md: `{{term phrase with a {nested term}}}`,
-         expected: `<p><span class="term-1">term phrase with a <span class="term-2">nested term</span></span></p>`
+         expected: `<p><span class="term-2">term phrase with a <span class="term-1">nested term</span></span></p>`
+      },
+      {
+         ignore: true,
+         testing: 'term 1 with escaped braces and nested term 2 at end',
+         md: `{term 1 with {escaped braces} and a {{nested term2}}}`,
+         expected: `<p><span class="term-2">term phrase with a <span class="term-1">nested term</span></span></p>`
       },
    ]
 
