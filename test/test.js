@@ -56,7 +56,12 @@ describe('basic usage', function () {
       testing: 'escaped term',
       md: `\\{Escaped term\\}`,
       expected: `<p>{Escaped term}</p>`
-   }
+   },
+   {
+      testing: 'one line with two terms',
+      md: `one {line} with {two} terms`,
+      expected: `<p>one <span class="term-1">line</span> with <span class="term-1">two</span> terms</p>`
+   },
    ]
 
    runTests(tests, processor)

@@ -51,6 +51,7 @@ new line?}
 let text3 = `{term1}{{followed by term2}}`
 
 let str = `{I am a {{differently}} nested {{term}}}`
+//let str = `one {line} with {two} terms`
 
 console.log(str)
 
@@ -67,7 +68,7 @@ console.log(str)
 // 
 
 
-options = options || [{
+let options = [{
    name: 'special_term_1',
    open: '{',
    close: '}',
@@ -81,38 +82,43 @@ options = options || [{
    class: 'term-2'
 }]
 
-let open = str.indexOf('{')
-let index = open + 1
-let term = []
+let start = str.indexOf('{') + 1
+let index = start
 let closers = ['}']
 
 do {
-   let newCloser = startsWithOpener(str, index, options)
-   if (newCloser) {
-      closers.unshift(newCloser)
-      index = index + newCloser.length
+   // if the next token is the terminal we are looking for, pop it
+   if (str.startsWith(closers[0], index)) {
+      closers.shift()
+      // either this is the end we desire
+      // or there's more stuff 
    } else {
-
+      // otherwise check for a new opener and push it on the stack
+      let result = checkForNestedTerms(str, index, options)
+      if (result) {
+         closers.unshift(result.closer)
+         index += result.advance
+      } else {
+         // it's just part of the term
+         ++index
+      }
 
    }
-
-   // if no new opener, check for a closer, 
-
-   term.push()
 }
 while (closers.length > 0 && index <= str.length)
 
 
-function startsWithOpener(str, index, options) {
+function checkForNestedTerms(str, index, options) {
    options.forEach(t => {
       if (str.startsWith(t.open, index)) {
-         return t.close
+         return { closer: t.close, advance: t.open.length }
       }
    })
    return null
 }
 
-
+console.log(index)
+console.log(str.substring(start, index )) // minus the length of the closer
 // let open = str.indexOf('{')
 
 // let close = str.indexOf('}', open)
