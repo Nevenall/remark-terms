@@ -1,17 +1,20 @@
 function plugin(options) {
    options = options || [{
-      name: 'special_term_1',
+      name: 'term_1',
       open: '{',
       close: '}',
       element: 'span',
       class: 'term-1'
    }, {
-      name: 'special_term_2',
+      name: 'term_2',
       open: '{{',
       close: '}}',
-      element: 'span',
+      elemddent: 'span',
       class: 'term-2'
    }]
+
+   // reverse the options in place, so rules declared first get precedence in nesting
+   options.reverse()
 
    const Parser = this.Parser
    const tokenizers = Parser.prototype.inlineTokenizers
@@ -19,7 +22,7 @@ function plugin(options) {
 
    var insertPoint = methods.indexOf('text')
 
-   options.reverse().forEach((config, idx) => {
+   options.forEach((config, idx) => {
       //require: term.open, term.closed
       if (config.open !== undefined && config.open !== null && config.open !== '' && config.close !== undefined && config.close !== null && config.close !== '') {
          // default element 'span', default class 'term'
@@ -27,30 +30,37 @@ function plugin(options) {
          let name = config.name || `term_${idx}`
 
          tokenizers[name] = function (eat, value, silent) {
-            let regex = new RegExp(`${config.open}([^${config.open}]*)${config.close}`, 'is')
 
             if (value.startsWith(config.open)) {
-               let match = value.match(regex)
+               // Start a small stack-based parser to handle nested terms
+               let start = config.open.length
+               let index = start
+               let closers = [config.close]
 
-               if (match) {
+               do {
+                  // if the next token is the terminal we are looking for, pop it and advance the index
+                  if (value.startsWith(closers[0], index)) {
+                     let closed = closers.shift()
+                     index += closed.length
+                  } else {
+                     // otherwise if there is a new opener, push it on the stack and advance the index
+                     let result = checkForNestedTerms(value, index, options)
+                     if (result) {
+                        closers.unshift(result.closer)
+                        index += result.advance
+                     } else {
+                        // it's just part of the term, advance
+                        ++index
+                     }
+                  }
+               }
+               while (closers.length > 0 && index <= value.length)
+
+               // if the stack is empty we've found a complete term
+               if (closers.length == 0) {
                   if (silent) return true
-
-                  let term = match[1]
-
-                  let toEat = match[0]
-
-                  // if toEat doesn't match the rest of the string 
-                  // then what?
-                  // probable better to do a search for matchings
-                  // we kinda have to do a simple tokenization
-                  // we have the set of term openings and closings
-                  // so that's fine. 
-
-                  // we have the opening for the term
-                  // search the string and if we find another matching opener
-                  // we know we have to look for the closing tag before we can be sure
-                  // we've found the correct closing tag for this tokenizer. 
-
+                  let term = value.substring(start, index - config.close.length)
+                  let toEat = value.substring(0, index)
 
                   let node = {
                      type: name,
@@ -68,43 +78,7 @@ function plugin(options) {
 
                   eat(toEat)(node)
                }
-
-
             }
-
-
-            // if (value.startsWith(config.open)) {
-
-
-            //    // todo - how can we ensure that nested doubles works? 
-            //    // ensure that the close we picked doesn't match any other close. 
-            //    // let closeIndex = value.indexOf(config.close, config.open.length)
-            //    let closeIndex = value.lastIndexOf(config.close)
-
-
-            //    if (closeIndex !== -1) {
-            //       if (silent) return true
-
-            //       let term = value.substring(config.open.length, closeIndex)
-            //       let toEat = value.substring(0, closeIndex + config.close.length)
-
-            //       let node = {
-            //          type: name,
-            //          data: {
-            //             hName: config.element || 'span'
-            //          },
-            //          children: this.tokenizeInline(term, eat.now())
-            //       }
-
-            //       if (config.class) {
-            //          node.data.hProperties = {
-            //             className: config.class
-            //          }
-            //       }
-
-            //       eat(toEat)(node)
-            //    }
-            // }
          }
 
          tokenizers[name].locator = function (value, fromIndex) {
@@ -117,6 +91,17 @@ function plugin(options) {
       }
    })
 
+
+
+   function checkForNestedTerms(str, index, options) {
+      for (let i = 0; i < options.length; i++) {
+         const term = options[i]
+         if (str.startsWith(term.open, index)) {
+            return { closer: term.close, advance: term.open.length }
+         }
+      }
+      return null
+   }
 }
 
 module.exports = plugin

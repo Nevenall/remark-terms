@@ -97,10 +97,10 @@ describe('nested terms', function () {
          expected: `<p><span class="term-1">term phrase with a <span class="term-2">nested term</span></span></p>`
       },
       {
-         ignore: true,
+         ignore: false,
          testing: 'term 1 with two nested term 2s',
          md: `{term 1 with {{TWO}} nested {{term2s}}}`,
-         expected: `<p><span class="term-1">term phrase with a <span class="term-2">nested term</span></span></p>`
+         expected: `<p><span class="term-1">term 1 with <span class="term-2">TWO</span> nested <span class="term-2">term2s</span></span></p>`
       },
       {
          ignore: false,
@@ -109,17 +109,17 @@ describe('nested terms', function () {
          expected: `<p><span class="term-2">term phrase with a <span class="term-1">nested term</span></span></p>`
       },
       {
-         ignore: true,
-         testing: 'term 1 with escaped braces and nested term 2 at end',
-         md: `{term 1 with {escaped braces} and a {{nested term2}}}`,
-         expected: `<p><span class="term-2">term phrase with a <span class="term-1">nested term</span></span></p>`
+         ignore: false,
+         testing: 'term 1 with nested term 1 and nested term 2 at end',
+         md: `{term 1 with {nested term 1} and a {{nested term2}}}`,
+         expected: `<p><span class="term-1">term 1 with <span class="term-1">nested term 1</span> and a <span class="term-2">nested term2</span></span></p>`
       },
    ]
 
    runTests(tests, processor)
 })
 
-describe.skip('customized terms', function () {
+describe('customized terms', function () {
 
    let processor = unified()
       .use(markdown, { commonmark: true })

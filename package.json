@@ -1,7 +1,7 @@
 {
   "name": "@nevenall/remark-terms",
-  "version": "2.0.0",
-  "description": "Add parsing curly braces to mark special terms",
+  "version": "2.1.0",
+  "description": "Add customizable parsing to wrap text in span elements",
   "main": "src/index.js",
   "scripts": {
     "test": "mocha"

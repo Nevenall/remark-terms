@@ -50,75 +50,85 @@ new line?}
 `
 let text3 = `{term1}{{followed by term2}}`
 
-let str = `{I am a {{differently}} nested {{term}}}`
-//let str = `one {line} with {two} terms`
+// let str = `{I am a {{differently}} nested {{term}}}`
+let str = `{this special term needs to \\{\\{preserve\\}\\} curly braces}`
 
 console.log(str)
 
+processor.process(str, function (err, file) {
+   console.error(report(err || file))
+   console.log(String(file))
+})
 
 // open , i
 // depth 0
 
 // have to do this character by character
 // use str.startsWith and an index 
-// if we find another opener now, depth ++,
+// if we find another opener now, depth ++, 
 // but we need to track multiple opening and closings
 // except, we always know the closer we are looking for because it will match
 // the opener. 
 // 
 
 
-let options = [{
-   name: 'special_term_1',
-   open: '{',
-   close: '}',
-   element: 'span',
-   class: 'term-1'
-}, {
-   name: 'special_term_2',
-   open: '{{',
-   close: '}}',
-   element: 'span',
-   class: 'term-2'
-}]
+// let options = [{
+//    name: 'special_term_1',
+//    open: '{',
+//    close: '}',
+//    element: 'span',
+//    class: 'term-1'
+// }, {
+//    name: 'special_term_2',
+//    open: '{{',
+//    close: '}}',
+//    element: 'span',
+//    class: 'term-2'
+// }]
 
-let start = str.indexOf('{') + 1
-let index = start
-let closers = ['}']
+// options.reverse()
 
-do {
-   // if the next token is the terminal we are looking for, pop it
-   if (str.startsWith(closers[0], index)) {
-      closers.shift()
-      // either this is the end we desire
-      // or there's more stuff 
-   } else {
-      // otherwise check for a new opener and push it on the stack
-      let result = checkForNestedTerms(str, index, options)
-      if (result) {
-         closers.unshift(result.closer)
-         index += result.advance
-      } else {
-         // it's just part of the term
-         ++index
-      }
+// let start = str.indexOf('{') + 1
+// let index = start
+// let closers = ['}']
 
-   }
-}
-while (closers.length > 0 && index <= str.length)
+// do {
+//    // if the next token is the terminal we are looking for, pop it
+//    if (str.startsWith(closers[0], index)) {
+//       let closed = closers.shift()
+//       if (closers.length > 0) index += closed.length
+//       // either this is the end we desire
+//       // or there's more stuff 
+//    } else {
+//       // otherwise check for a new opener and push it on the stack
+//       let result = checkForNestedTerms(str, index, options)
+//       if (result) {
+//          closers.unshift(result.closer)
+//          index += result.advance
+//       } else {
+//          // it's just part of the term
+//          ++index
+//       }
+
+//    }
+// }
+// while (closers.length > 0 && index <= str.length)
 
 
-function checkForNestedTerms(str, index, options) {
-   options.forEach(t => {
-      if (str.startsWith(t.open, index)) {
-         return { closer: t.close, advance: t.open.length }
-      }
-   })
-   return null
-}
+// function checkForNestedTerms(str, index, options) {
 
-console.log(index)
-console.log(str.substring(start, index )) // minus the length of the closer
+//    for (let i = 0; i < options.length; i++) {
+//       const term = options[i]
+//       if (str.startsWith(term.open, index)) {
+//          return { closer: term.close, advance: term.open.length }
+//       }
+
+//    }
+//    return null
+// }
+
+// console.log(index)
+// console.log(str.substring(start, index)) // minus the length of the closer
 // let open = str.indexOf('{')
 
 // let close = str.indexOf('}', open)
@@ -162,9 +172,5 @@ console.log(str.substring(start, index )) // minus the length of the closer
 
 
 
-// processor.process(text2, function (err, file) {
-//    console.error(report(err || file))
-//    console.log(String(file))
-// })
 
 

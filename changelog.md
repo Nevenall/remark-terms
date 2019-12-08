@@ -1,6 +1,22 @@
 # ChangeLog
 
-Release notes for remark-terms. Latest version is `2.0.0`.
+Release notes for remark-terms. Latest version is `2.1.0`.
+
+## [2.1.0] - 2019-12-08
+
+This release makes some dramatic improvements, especially in the handling of nested terms. 
+
+### Added
+
+- `name` property to `configuration`. It's used as the name for the tokenizer and the MDAST node.
+- Many new tests
+
+### Changed
+
+- Parsing of nested terms of the same type now works. Rather then, I believe, escaping term markers as it may have before.
+- Parsing where the nested term comes at the end of the string works now.
+- Parsing of multiple nested terms works
+- Updated to latest unified.js packages
 
 ## [2.0.0] - 2019-03-02
 
