@@ -1,5 +1,5 @@
 {
-  "name": "@nevenall/remark-terms",
+  "name": "remark-terms",
   "version": "2.1.0",
   "description": "Add customizable parsing to wrap text in span elements",
   "main": "src/index.js",
