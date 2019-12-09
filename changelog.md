@@ -9,6 +9,7 @@ This release makes some dramatic improvements, especially in the handling of nes
 ### Added
 
 - `name` property to `configuration`. It's used as the name for the tokenizer and the MDAST node.
+  - thanks to [Ayc0](https://github.com/Ayc0) for the pull request!
 - Many new tests
 
 ### Changed
