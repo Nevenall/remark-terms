@@ -1,6 +1,6 @@
 {
   "name": "remark-terms",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Add customizable parsing to wrap text in span elements",
   "main": "src/index.js",
   "scripts": {
