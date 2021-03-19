@@ -104,4 +104,4 @@ function plugin(options) {
    }
 }
 
-module.exports = plugin
+export default plugin
