@@ -1,3 +1,7 @@
+# I recommend you take a look at this alternative
+
+https://github.com/micromark/micromark-extension-directive
+
 # remark-terms
 
 This [remark] plugin adds parsing to wrap markdown text in `<span>` elements with a unique `class`. 
